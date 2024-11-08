@@ -21,6 +21,7 @@ export class ProductRepositoryImp implements ProductRepository {
     const newProductData: Partial<Product> = {
       name: params.name,
       price: params.price,
+      image: params.image,
       description: params.description,
       quantity: params.quantity,
     };
@@ -32,6 +33,7 @@ export class ProductRepositoryImp implements ProductRepository {
   async getProducts(query: GetProductsRequestQueryDto) {
     const products = await this.productModel.findAndCountAll({
       where: query.search ? { name: { [Op.iLike]: `%${query.search}%` } } : {},
+      order: [['createdAt', 'ASC']],
       offset: (query.page - 1) * query.limit,
       limit: query.limit,
     });
